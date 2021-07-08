@@ -1,5 +1,6 @@
 #include <QtTest>
 
+#include "settingshandler.h"
 // add necessary includes here
 
 class TestCase : public QObject
@@ -8,10 +9,13 @@ class TestCase : public QObject
 
 public:
     TestCase();
-    ~TestCase();
+//    ~TestCase();
 
 private slots:
-    void test_case1();
+    void SettingsHandlerGetDeviceNameTestDefault();
+    void SettingsHandlerGetDeviceNameTest();
+    void SettingsHandlerGetDeviceIpTestDefault();
+    void SettingsHandlerGetDeviceIpTest();
 
 };
 
@@ -20,14 +24,31 @@ TestCase::TestCase()
 
 }
 
-TestCase::~TestCase()
+void TestCase::SettingsHandlerGetDeviceNameTestDefault()
 {
-
+    QVERIFY(Settings::SettingsHandler::GetInstance()->GetDeviceName() == "");
 }
 
-void TestCase::test_case1()
-{
+//TestCase::~TestCase()
+//{
 
+//}
+
+void TestCase::SettingsHandlerGetDeviceNameTest()
+{
+    Settings::SettingsHandler::GetInstance()->SetDeviceName("test");
+    QVERIFY(Settings::SettingsHandler::GetInstance()->GetDeviceName() == "test");
+}
+
+void TestCase::SettingsHandlerGetDeviceIpTestDefault()
+{
+    QVERIFY(Settings::SettingsHandler::GetInstance()->GetDeviceIp() == "");
+}
+
+void TestCase::SettingsHandlerGetDeviceIpTest()
+{
+    Settings::SettingsHandler::GetInstance()->SetDeviceIp("192.168.0.144");
+    QVERIFY(Settings::SettingsHandler::GetInstance()->GetDeviceIp() == "192.168.0.144");
 }
 
 QTEST_APPLESS_MAIN(TestCase)
