@@ -13,28 +13,22 @@ Settings::SettingsHandler *Settings::SettingsHandler::GetInstance()
     return &instance;
 }
 
-QString Settings::SettingsHandler::GetDeviceName() const
+QString Settings::SettingsHandler::GetLastDeviceName() const
 {
-    return settings_->value(DEVICE_NAME, "").toString();
+    return settings_->value(LAST_DEVICE_NAME, "").toString();
 }
 
-void Settings::SettingsHandler::SetDeviceName(const QString &device_name)
+void Settings::SettingsHandler::SetLastDeviceName(const QString &device_name)
 {
-    settings_->setValue(DEVICE_NAME, device_name);
+    settings_->setValue(LAST_DEVICE_NAME, device_name);
 }
 
-QString Settings::SettingsHandler::GetDeviceIp() const
+QString Settings::SettingsHandler::GetLastDeviceIp() const
 {
-    return settings_->value(DEVICE_IP, "").toString();
+    return settings_->value(LAST_DEVICE_IP, "").toString();
 }
 
-void Settings::SettingsHandler::SetDeviceIp(const QString &device_ip)
+void Settings::SettingsHandler::SetLastDeviceIp(const QString &device_ip)
 {
-    settings_->setValue(DEVICE_IP, device_ip);
+    settings_->setValue(LAST_DEVICE_IP, device_ip);
 }
-
-//std::shared_ptr<Settings::SettingsHandler> Settings::SettingsHandler::GetInstance()
-//{
-//    static std::shared_ptr<SettingsHandler> instance = std::make_shared<SettingsHandler> (new QSettings(SETTINGS_FILE_NAME, QSettings::IniFormat));
-//    return instance;
-//}

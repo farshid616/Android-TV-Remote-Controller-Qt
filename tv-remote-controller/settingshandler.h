@@ -8,18 +8,17 @@
 namespace Settings  {
 
 const QString SETTINGS_FILE_NAME = "settings.ini";
-const QString DEVICE_NAME = "DEVICE_NAME";
-const QString DEVICE_IP = "DEVICE_IP";
+const QString LAST_DEVICE_NAME = "LAST_DEVICE_NAME";
+const QString LAST_DEVICE_IP = "LAST_DEVICE_IP";
 
 class SettingsHandler
 {
 public:
-//    std::shared_ptr<SettingsHandler> GetInstance();
     static SettingsHandler* GetInstance();
-    QString GetDeviceName() const;
-    void SetDeviceName(const QString& device_name);
-    QString GetDeviceIp() const;
-    void SetDeviceIp(const QString& device_ip);
+    QString GetLastDeviceName() const;
+    void SetLastDeviceName(const QString& device_name);
+    QString GetLastDeviceIp() const;
+    void SetLastDeviceIp(const QString& device_ip);
 
 private:
     SettingsHandler();

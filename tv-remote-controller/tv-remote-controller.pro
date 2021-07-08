@@ -8,6 +8,7 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
+        messagehandler.cpp \
         settingshandler.cpp
 
 RESOURCES += qml.qrc
@@ -24,4 +25,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    datamodel.h \
+    messagehandler.h \
     settingshandler.h
