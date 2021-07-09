@@ -9,7 +9,9 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         messagehandler.cpp \
-        settingshandler.cpp
+        remotecontrolcore.cpp \
+        settingshandler.cpp \
+        upnpdiscovery.cpp
 
 RESOURCES += qml.qrc
 
@@ -27,4 +29,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     datamodel.h \
     messagehandler.h \
-    settingshandler.h
+    remotecontrolcore.h \
+    settingshandler.h \
+    upnpdiscovery.h

@@ -13,4 +13,10 @@ struct DialDevice
     QString type{};
     QString udn{};
 };
+
+enum DiscoveryState {
+    StateIdle,
+    StateSearching,
+    StateError
+};
 #endif // DATAMODEL_H
