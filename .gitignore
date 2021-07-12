@@ -33,3 +33,7 @@
 
 # Qt Files
 *.pro.user
+
+# Other
+.idea
+cmake-build*

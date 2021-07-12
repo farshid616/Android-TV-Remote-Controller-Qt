@@ -4,6 +4,7 @@
 #include <QObject>
 #include "messagehandler.h"
 #include "upnpdiscovery.h"
+#include "pairinghandler.h"
 
 class RemoteControlCore : public QObject
 {
@@ -17,7 +18,9 @@ private slots:
     void DialDeviceDetected(const QUrl& dial_rest_url, const QByteArray& device_description);
 
 private:
+    void Start();
     UpnpDiscovery upnp_discovery_;
+    PairingHandler pairing_handler_;
 
 };
 

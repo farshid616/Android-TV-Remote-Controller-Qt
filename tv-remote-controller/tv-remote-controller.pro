@@ -1,4 +1,4 @@
-QT += quick virtualkeyboard
+QT += quick virtualkeyboard network opcua
 
 CONFIG += c++11
 
@@ -9,6 +9,7 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         messagehandler.cpp \
+        pairinghandler.cpp \
         remotecontrolcore.cpp \
         settingshandler.cpp \
         upnpdiscovery.cpp
@@ -29,6 +30,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     datamodel.h \
     messagehandler.h \
+    pairinghandler.h \
     remotecontrolcore.h \
     settingshandler.h \
+    socketutils.h \
     upnpdiscovery.h

@@ -11,6 +11,12 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+#export CMAKE_PREFIX_PATH=/home/farshid/Qt/5.15.0/gcc_64:$CMAKE_PREFIX_PATH
+set(Qt5Core_DIR /home/farshid/Qt/5.15.0/gcc_64/lib/cmake/Qt5Core)
+set(Qt5Quick_DIR /home/farshid/Qt/5.15.0/gcc_64/lib/cmake/Qt5Quick)
+set(Qt5OpcUa_DIR /home/farshid/Qt/5.15.0/gcc_64/lib/cmake/Qt5OpcUa)
+set(Qt5Network_DIR /home/farshid/Qt/5.15.0/gcc_64/lib/cmake/Qt5Network)
+
 # QtCreator supports the following variables for Android, which are identical to qmake Android variables.
 # Check https://doc.qt.io/qt/deployment-android.html for more information.
 # They need to be set before the find_package(...) calls below.
@@ -24,12 +30,24 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #    endif()
 #endif()
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick REQUIRED)
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick Network OpcUa REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick Network OpcUa REQUIRED)
 
 set(PROJECT_SOURCES
         main.cpp
         qml.qrc
+        datamodel.h
+        messagehandler.cpp
+        messagehandler.h
+        pairinghandler.cpp
+        pairinghandler.h
+        remotecontrolcore.cpp
+        remotecontrolcore.h
+        settingshandler.cpp
+        settingshandler.h
+        socketutils.h
+        upnpdiscovery.cpp
+        upnpdiscovery.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -51,4 +69,4 @@ endif()
 target_compile_definitions(tv-remote-controller
   PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_link_libraries(tv-remote-controller
-  PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick)
+  PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::OpcUa)

@@ -12,6 +12,12 @@ public:
 private slots:
     void DialDeviceDescriptionParserTest();
     void DialDeviceDescriptionParserTestInvalid();
+    void CreatePairingJsonMessageTest();
+    void CreateOptionJsonMessageTest();
+    void CreateConfigurationJsonMessageTest();
+    void CreateSecretJsonMessageTest();
+    void JsonMessageParserTest();
+    void JsonMessageParserTestInvalid();
 
 };
 

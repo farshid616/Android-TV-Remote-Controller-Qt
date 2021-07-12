@@ -1,6 +1,8 @@
 #include "settingshandler.h"
 
-
+Settings::SettingsHandler::~SettingsHandler() {
+    delete settings_;
+}
 
 Settings::SettingsHandler::SettingsHandler()
 {

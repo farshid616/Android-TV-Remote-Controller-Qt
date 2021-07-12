@@ -1,6 +1,9 @@
 #include "messagehandlertestcase.h"
 
 #include <QTest>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 #include "datamodel.h"
 #include "messagehandler.h"
 
@@ -42,4 +45,80 @@ void MessageHandlerTestCase::DialDeviceDescriptionParserTestInvalid()
     QVERIFY(dial_device.type == "");
     QVERIFY(dial_device.udn == "");
     QVERIFY(dial_device.dial_rest_url == url);
+}
+
+void MessageHandlerTestCase::CreatePairingJsonMessageTest()
+{
+    QJsonDocument doc = QJsonDocument::fromJson(MessageHandler::CreatePairingRequestJsonMessage("test"));
+    QJsonObject json_data = doc.object();
+    QVERIFY(json_data["payload"].toObject()["client_name"].toString() == "test");
+    QVERIFY(json_data["payload"].toObject()["service_name"].toString() == "androidtvremote");
+    QVERIFY(json_data["status"].toInt() == 200);
+    QVERIFY(json_data["type"].toInt() == 10);
+    QVERIFY(json_data["protocol_version"].toInt() == 1);
+}
+
+void MessageHandlerTestCase::CreateOptionJsonMessageTest()
+{
+    QJsonDocument doc = QJsonDocument::fromJson(MessageHandler::CreateOptionJsonMessage());
+    QJsonObject json_data = doc.object();
+    QVERIFY(json_data["status"].toInt() == 200);
+    QVERIFY(json_data["type"].toInt() == 20);
+    QVERIFY(json_data["protocol_version"].toInt() == 1);
+    QVERIFY(json_data["payload"].toObject()["preferred_role"].toInt() == 1);
+    QVERIFY(json_data["payload"].toObject()["output_encodings"].toArray()[0].toObject()["symbol_length"] == 4);
+    QVERIFY(json_data["payload"].toObject()["output_encodings"].toArray()[0].toObject()["type"] == 3);
+    QVERIFY(json_data["payload"].toObject()["input_encodings"].toArray()[0].toObject()["symbol_length"] == 4);
+    QVERIFY(json_data["payload"].toObject()["input_encodings"].toArray()[0].toObject()["type"] == 3);
+}
+
+void MessageHandlerTestCase::CreateConfigurationJsonMessageTest()
+{
+    QJsonDocument doc = QJsonDocument::fromJson(MessageHandler::CreateConfigurationJsonMessage());
+    QJsonObject json_data = doc.object();
+    QVERIFY(json_data["status"].toInt() == 200);
+    QVERIFY(json_data["type"].toInt() == 30);
+    QVERIFY(json_data["protocol_version"].toInt() == 1);
+    QVERIFY(json_data["payload"].toObject()["client_role"].toInt() == 1);
+    QVERIFY(json_data["payload"].toObject()["encoding"].toObject()["symbol_length"] == 4);
+    QVERIFY(json_data["payload"].toObject()["encoding"].toObject()["type"] == 3);
+}
+
+void MessageHandlerTestCase::CreateSecretJsonMessageTest()
+{
+    QString secret_hash = "test";
+    QJsonDocument doc = QJsonDocument::fromJson(MessageHandler::CreateSecretJsonMessage(secret_hash));
+    QJsonObject json_data = doc.object();
+    QVERIFY(json_data["status"].toInt() == 200);
+    QVERIFY(json_data["type"].toInt() == 40);
+    QVERIFY(json_data["protocol_version"].toInt() == 1);
+    QVERIFY(json_data["payload"].toObject()["secret"].toString() == secret_hash);
+    QJsonObject jobject, payload_object;
+}
+
+void MessageHandlerTestCase::JsonMessageParserTest()
+{
+    int type{}, status{};
+
+    QJsonObject jobject, payload_object;
+    payload_object["service_name"] = "androidtvremote";
+    payload_object["client_name"] = "test";
+
+    jobject["protocol_version"] = 1;
+    jobject["type"] = 10;
+    jobject["status"] = 200;
+    jobject["payload"] = payload_object;
+    QJsonDocument json_document(jobject);
+    QVERIFY(MessageHandler::JsonMessageParser(json_document.toJson(), status, type));
+    QVERIFY(type == 10);
+    QVERIFY(status == 200);
+}
+
+void MessageHandlerTestCase::JsonMessageParserTestInvalid()
+{
+    int type{}, status{};
+    QByteArray json_data = "{\"name\":1";
+    QVERIFY(!MessageHandler::JsonMessageParser(json_data, status, type));
+    QVERIFY(type == 0);
+    QVERIFY(status == 0);
 }

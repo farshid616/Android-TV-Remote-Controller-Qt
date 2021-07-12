@@ -62,7 +62,7 @@ void UpnpDiscovery::ProcessDiscoveryData()
 
         QList<QByteArray> lines = reply.split('\n');
 
-        if (lines.size() > 0 && qstrnicmp(lines[0].constData(), "http/1.1 200", 12)) {
+        if (!lines.empty() && qstrnicmp(lines[0].constData(), "http/1.1 200", 12)) {
             qDebug() << "Unexpected response";
             continue;
         }
