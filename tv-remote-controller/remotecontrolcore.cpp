@@ -17,7 +17,25 @@ void RemoteControlCore::DialDeviceDetected(const QUrl &dial_rest_url, const QByt
     qDebug()<<"name = "<<device.friendly_name;
     qDebug()<<"ip = "<<device.dial_rest_url.host();
 
-    pairing_handler_.StartPairing("hmi", device.dial_rest_url.host(), "key.pem", "cert.pem");
+//    pairing_handler_.StartPairing("hmi", device.dial_rest_url.host(), "key.pem", "cert.pem");
+
+//    QTimer::singleShot(15000, [=]{
+//            command_sender_.StartSending(device.friendly_name, device.dial_rest_url.host(), "key.pem", "cert.pem");
+//            qDebug()<<"connect";
+//        });
+    command_sender_.StartSending("test", device.dial_rest_url.host(), "key.pem", "cert.pem");
+    QTimer::singleShot(5000, [=]{
+            command_sender_.SendKey(24);
+            qDebug()<<"send key";
+        });
+    QTimer::singleShot(6000, [=]{
+            command_sender_.SendKey(25);
+            qDebug()<<"send key";
+        });
+    QTimer::singleShot(7000, [=]{
+            command_sender_.SendKey(19);
+            qDebug()<<"send key";
+        });
 
 }
 

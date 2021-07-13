@@ -62,6 +62,8 @@ void PairingHandler::ParsePairingData(const QByteArray &data)
                 SendData(MessageHandler::CreateConfigurationJsonMessage());
             } else if (type == 31) {
                 SendData(MessageHandler::CreateSecretJsonMessage(QString(GetBase64SecretHash())));
+            } else if (type == 41) {
+                emit PairingFinished();
             }
         } else {
             qDebug()<<"status else";

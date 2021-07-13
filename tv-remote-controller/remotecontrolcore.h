@@ -5,6 +5,7 @@
 #include "messagehandler.h"
 #include "upnpdiscovery.h"
 #include "pairinghandler.h"
+#include "keycommandsender.h"
 
 class RemoteControlCore : public QObject
 {
@@ -21,6 +22,7 @@ private:
     void Start();
     UpnpDiscovery upnp_discovery_;
     PairingHandler pairing_handler_;
+    KeyCommandSender command_sender_;
 
 };
 

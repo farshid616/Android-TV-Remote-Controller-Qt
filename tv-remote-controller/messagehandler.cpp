@@ -4,6 +4,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QJsonArray>
+#include <algorithm>
 
 DialDevice MessageHandler::ParseDialDeviceDescription(const QUrl &dial_rest_url, const QByteArray &device_description)
 {
@@ -125,4 +126,43 @@ bool MessageHandler::JsonMessageParser(const QByteArray &json_message, int &stat
     status = json_object["status"].toInt();
     type = json_object["type"].toInt();
     return true;
+}
+
+QByteArray MessageHandler::ProtoBufConfigurationMessageCreator(const QString &device_name)
+{
+    std::vector<int> message_array = {1,0,0,21,0,0,0,1,0,0,0,1,32,3,0,0,0,0,0,0};
+    QByteArray message;
+    message_array.push_back(device_name.size());
+//    for (const auto& item: device_name) {
+//        message_array.push_back(int(item.toLatin1()));
+//    }
+    std::transform(device_name.begin(), device_name.end(), std::back_inserter(message_array),
+                   [](QChar letter) -> int { return int(letter.toLatin1()); });
+
+    std::transform(message_array.begin(), message_array.end(), std::back_inserter(message),
+                   [](int item) -> char { return char(item); });
+//    for (const auto& item: message_array) {
+//        message.append(char(item));
+//    }
+    return message;
+}
+
+QByteArray MessageHandler::ProtoBufSendKeyMessageCreator(const int &key_code, const bool &released, const int &counter)
+{
+    std::vector<int> message_array = {1,2,0,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    QByteArray message;
+    message_array.push_back(key_code);
+    // change counter value
+    message_array[11] = counter;
+    if (released) {
+        // change press flag to release
+        message_array[15] = 1;
+    }
+
+//    for (const auto& item: message_array) {
+//        message.append(char(item));
+//    }
+    std::transform(message_array.begin(), message_array.end(), std::back_inserter(message),
+                   [](int item) -> char { return char(item);});
+    return message;
 }

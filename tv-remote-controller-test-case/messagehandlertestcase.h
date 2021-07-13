@@ -18,6 +18,9 @@ private slots:
     void CreateSecretJsonMessageTest();
     void JsonMessageParserTest();
     void JsonMessageParserTestInvalid();
+    void ProtoBufConfigurationMessageCreatorTest();
+    void ProtoBufSendKeyMessageCreatorTest();
+    void ProtoBufSendKeyMessageCreatorTestRelease();
 
 };
 

@@ -13,6 +13,7 @@ public:
                       const QString& private_key_path, const QString& certificate_path);
 
 signals:
+    void PairingFinished();
 private slots:
     void SocketDataReadyRead();
     void SslErrors(const QList<QSslError>& errors);

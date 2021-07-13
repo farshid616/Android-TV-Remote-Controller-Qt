@@ -48,6 +48,8 @@ set(PROJECT_SOURCES
         socketutils.h
         upnpdiscovery.cpp
         upnpdiscovery.h
+        keycommandsender.cpp
+        keycommandsender.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

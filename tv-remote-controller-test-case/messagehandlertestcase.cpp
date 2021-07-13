@@ -122,3 +122,33 @@ void MessageHandlerTestCase::JsonMessageParserTestInvalid()
     QVERIFY(type == 0);
     QVERIFY(status == 0);
 }
+
+void MessageHandlerTestCase::ProtoBufConfigurationMessageCreatorTest()
+{
+    std::vector<int> arr = {1,0,0,21,0,0,0,1,0,0,0,1,32,3,0,0,0,0,0,0,4,116,101,115,116};
+    QByteArray message;
+    for (const auto& item: arr) {
+        message.append(char(item));
+    }
+    QVERIFY(MessageHandler::ProtoBufConfigurationMessageCreator("test") == message);
+}
+
+void MessageHandlerTestCase::ProtoBufSendKeyMessageCreatorTest()
+{
+    std::vector<int> arr = {1,2,0,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,24};
+    QByteArray message;
+    for (const auto& item: arr) {
+        message.append(char(item));
+    }
+    QVERIFY(MessageHandler::ProtoBufSendKeyMessageCreator(24, false, 0) == message);
+}
+
+void MessageHandlerTestCase::ProtoBufSendKeyMessageCreatorTestRelease()
+{
+    std::vector<int> arr = {1,2,0,16,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,25};
+    QByteArray message;
+    for (const auto& item: arr) {
+        message.append(char(item));
+    }
+    QVERIFY(MessageHandler::ProtoBufSendKeyMessageCreator(25, true, 1) == message);
+}

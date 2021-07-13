@@ -7,6 +7,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        keycommandsender.cpp \
         main.cpp \
         messagehandler.cpp \
         pairinghandler.cpp \
@@ -29,9 +30,14 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     datamodel.h \
+    keycommandsender.h \
     messagehandler.h \
     pairinghandler.h \
     remotecontrolcore.h \
     settingshandler.h \
     socketutils.h \
     upnpdiscovery.h
+
+DISTFILES += \
+    main.qml \
+    Style.qml
