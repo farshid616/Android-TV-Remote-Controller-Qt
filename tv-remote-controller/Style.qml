@@ -4,6 +4,9 @@ QtObject {
     readonly property int spacingSmall:     8
     readonly property int spacingMedium:    16
     readonly property int spacingLarge:     32
+    readonly property int spacingXLarge:    64
+    readonly property int spacingXXLarge:   128
+
 
 //    readonly property int radiusMedium:     12
 //    readonly property int radiusLarge:      24
@@ -14,10 +17,10 @@ QtObject {
 //    readonly property int controlInputHeight:   64
 //    readonly property int listItemHeight:       80
 
-//    readonly property int textSizeSmall:    15
-//    readonly property int textSizeMedium:   20
-//    readonly property int textSizeLarge:    25
-//    readonly property int textSizeXLarge:   45
+    readonly property int textSizeSmall:    15
+    readonly property int textSizeMedium:   20
+    readonly property int textSizeLarge:    25
+    readonly property int textSizeXLarge:   45
 
 //    readonly property color colorApplication:   "#FF202124"
 //    readonly property color colorControl:       "#FF575C61"
@@ -35,6 +38,7 @@ QtObject {
 //    readonly property color colorIconSecondary: colorTextSecondary
 //    readonly property color colorIconHint:      colorTextHint
 
+      readonly property color  colorGlow: "#BBABEBFB"
 //    readonly property int   durationFast:       200
 //    readonly property int   durationMedium:     350
 //    readonly property int   durationSlow:       600

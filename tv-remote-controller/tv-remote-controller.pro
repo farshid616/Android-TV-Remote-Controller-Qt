@@ -39,5 +39,7 @@ HEADERS += \
     upnpdiscovery.h
 
 DISTFILES += \
+    Button.qml \
+    KeysPage.qml \
     main.qml \
     Style.qml

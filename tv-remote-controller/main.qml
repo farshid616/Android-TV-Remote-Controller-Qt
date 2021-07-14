@@ -6,8 +6,8 @@ import QtQuick.Layouts 1.15
 Window {
     id: app
     readonly property Style style: Style{}
-    width: 800
-    height: 600
+    width: 720
+    height: 500
     visible: true
     title: qsTr("Android TV Remote Control")
 
@@ -17,56 +17,78 @@ Window {
         anchors.centerIn: parent
         anchors.fill: parent
 
+
         RowLayout {
             id: header
-            width: parent.width
-            height: 40
+            width: app.width
+            height: app.height / 12
             Text {
                 id: deviceTest
                 text: qsTr("No device found!")
                 leftPadding: app.style.spacingLarge
                 topPadding: app.style.spacingSmall
+                color: "#919191"
             }
-            Rectangle {
-                anchors.right: parent.right
-                width: 60
+
+            Button {
+                id: settingsButton
+                width: app.height / 10
                 height: parent.height
-                color: "transparent"
-                anchors.rightMargin: app.style.spacingMedium
-                Image {
-                    id: headerButton
-                    source: "file"
+                Layout.alignment: Qt.AlignRight
+                Layout.rightMargin: app.style.spacingMedium
+                Layout.topMargin: app.style.spacingSmall
+                buttonImage: "/resources/Resources/setting.png"
+            }
+        }
+        Loader {
+            id: loader
+            anchors.top: header.bottom
+            anchors.topMargin: app.style.spacingMedium
+            width: app.width
+            height: app.height / 1.1
+            source: "KeysPage.qml"
+
+            onSourceChanged: animation.running = true
+
+            NumberAnimation {
+                id: animation
+                target: loader.item
+                property: "x"
+                from: 0
+                to: app.width - loader.item.width
+                duration: 1000
+                easing.type: Easing.InExpo
+            }
+        }
+
+
+    }
+    InputPanel {
+        id: inputPanel
+        z: 99
+        x: 0
+        y: app.height
+        width: app.width
+
+        states: State {
+            name: "visible"
+            when: inputPanel.active
+            PropertyChanges {
+                target: inputPanel
+                y: app.height - inputPanel.height
+            }
+        }
+        transitions: Transition {
+            from: ""
+            to: "visible"
+            reversible: true
+            ParallelAnimation {
+                NumberAnimation {
+                    properties: "y"
+                    duration: 250
+                    easing.type: Easing.InOutQuad
                 }
             }
         }
-//    InputPanel {
-//        id: inputPanel
-//        z: 99
-//        x: 0
-//        y: window.height
-//        width: window.width
-
-
-//        states: State {
-//            name: "visible"
-//            when: inputPanel.active
-//            PropertyChanges {
-//                target: inputPanel
-//                y: window.height - inputPanel.height
-//            }
-//        }
-//        transitions: Transition {
-//            from: ""
-//            to: "visible"
-//            reversible: true
-//            ParallelAnimation {
-//                NumberAnimation {
-//                    properties: "y"
-//                    duration: 250
-//                    easing.type: Easing.InOutQuad
-//                }
-//            }
-//        }
-//    }
     }
 }

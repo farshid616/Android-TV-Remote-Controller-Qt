@@ -2,5 +2,23 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>Style.qml</file>
+        <file>Button.qml</file>
+        <file>KeysPage.qml</file>
+    </qresource>
+    <qresource prefix="/resources">
+        <file>Resources/down.png</file>
+        <file>Resources/left.png</file>
+        <file>Resources/menu.png</file>
+        <file>Resources/minus.png</file>
+        <file>Resources/ok.png</file>
+        <file>Resources/playpause.png</file>
+        <file>Resources/plus.png</file>
+        <file>Resources/right.png</file>
+        <file>Resources/up.png</file>
+        <file>Resources/home.png</file>
+        <file>Resources/setting.png</file>
+        <file>Resources/keyboard.png</file>
+        <file>Resources/back.png</file>
+        <file>Resources/Power.png</file>
     </qresource>
 </RCC>
