@@ -2,15 +2,14 @@
 #define UPNPDISCOVERY_H
 
 #include <QObject>
-//#include <QHostAddress>
 #include <QUdpSocket>
 #include <QNetworkAccessManager>
-//#include <QNetworkRequest>
 #include <QNetworkReply>
 #include "datamodel.h"
 
 const int UPNP_PORT = 1900;
 
+// This class is responsible for discovery process of dial devices with upnp
 class UpnpDiscovery : public QObject
 {
     Q_OBJECT

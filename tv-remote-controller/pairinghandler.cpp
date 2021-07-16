@@ -1,9 +1,10 @@
 #include "pairinghandler.h"
 
-#include <iostream>
 #include "socketutils.h"
 #include "messagehandler.h"
 
+// PairingHandler class constructor
+// Creating QsslSocket object and connecting its signals
 PairingHandler::PairingHandler(QObject *parent) : QObject(parent)
 {
     pairing_socket_ = new QSslSocket(this);
@@ -14,6 +15,12 @@ PairingHandler::PairingHandler(QObject *parent) : QObject(parent)
             this, &PairingHandler::SslErrors);
 }
 
+// This function will initializing the ssl socket by setting the PrivateKey, Certificate
+// and connecting the socket to device ip and port
+// param device_name: QString of android device name
+// param server_ip: QString of android device ip
+// param private_key_path: QString path to private key pem file, includeing name of the file and extention
+// param certificate_path: QString path to certificate pem file, includeing name of the file and extention
 void PairingHandler::StartPairing(const QString &client_name, const QString &server_ip,
                                   const QString& private_key_path, const QString& certificate_path)
 {
@@ -28,6 +35,15 @@ void PairingHandler::StartPairing(const QString &client_name, const QString &ser
     SendData(MessageHandler::CreatePairingRequestJsonMessage(client_name));
 }
 
+// This function will create the last message of pairing by recieving the entered 4 digit pairing code
+// param pairing_code: QString of entered 4 digit pairing code
+void PairingHandler::FinishPairing(const QString &pairing_code)
+{
+    SendData(MessageHandler::CreateSecretJsonMessage(QString(GetBase64SecretHash(pairing_code))));
+}
+
+// This function is a callback for socket to receive incoming data
+// after receiving data it will passed to the message parser
 void PairingHandler::SocketDataReadyRead()
 {
     QByteArray data{};
@@ -39,18 +55,26 @@ void PairingHandler::SocketDataReadyRead()
     }
 }
 
+// This is a callback function for handling ssl errors
+// param errors: list of occured ssl errors
 void PairingHandler::SslErrors(const QList<QSslError> &errors)
 {
     for (const auto& item: errors)
         qDebug()<<"error = "<<item;
 }
 
+// This function is responsible to write given bytes on socket
+// param data: QByteArray of data
 void PairingHandler::SendData(const QByteArray &data)
 {
+    // At first we should send, size of the data seperately
     pairing_socket_->write(GetFourByteArray(QString(data).size()));
     pairing_socket_->write(data);
 }
 
+// ParsePairingData receives raw data and will parse the data to find message type and status
+// to response to it correctly
+// param data: QByteArray of received socket raw data
 void PairingHandler::ParsePairingData(const QByteArray &data)
 {
     int type{}, status{};
@@ -61,36 +85,37 @@ void PairingHandler::ParsePairingData(const QByteArray &data)
             } else if (type == 20) {
                 SendData(MessageHandler::CreateConfigurationJsonMessage());
             } else if (type == 31) {
-                SendData(MessageHandler::CreateSecretJsonMessage(QString(GetBase64SecretHash())));
+                emit EnterPairingCode();
+                qDebug()<<"enter ";
             } else if (type == 41) {
                 emit PairingFinished();
             }
         } else {
-            qDebug()<<"status else";
+            qDebug()<<"status error";
         }
     } else {
         qDebug()<<"parse error";
     }
 }
 
-QByteArray PairingHandler::GetBase64SecretHash()
+// This function will receive 4 digit entered pairing code and create a SHA-256 secret message consisting of:
+// client modulus, client exponent, server modulus, server exponent and last 2 digit of entered key
+// param pairing_code: QString 4 digit entered pairing code
+// return: QByteArray of based64 encoded created hash
+QByteArray PairingHandler::GetBase64SecretHash(const QString &pairing_code)
 {
+    // Regex to extracting modulus and exponent from certificate
     const QRegularExpression expression(QLatin1String(R"(Public-Key:[.\s\S]+Modulus:([.\s\S]+)Exponent:(.+))"), QRegularExpression::MultilineOption);
     const QRegularExpressionMatch client_regex_match(expression.match(pairing_socket_->localCertificate().toText()));
     const QRegularExpressionMatch server_regex_match(expression.match(pairing_socket_->peerCertificate().toText()));
 
     QCryptographicHash secret_hash(QCryptographicHash::Sha256);
     QString code_in;
-    std::string in;
     QStringList exponent = QString("01:00:01").split(':');
 
     QByteArray client_mod, client_exp, server_mod, server_exp;
-    //TODO: Temporary should change
-    std::cout<<"enter : \n";
-    std::cin>>in;
-    // Temporary End
-    code_in = in.c_str();
-    code_in = code_in.section("",3);
+
+    code_in = pairing_code.section("",3);
 
     for (const auto& item: exponent) {
         client_exp.append(QByteArray::fromHex(item.toLocal8Bit()));

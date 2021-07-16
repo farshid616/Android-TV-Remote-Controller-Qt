@@ -2,14 +2,21 @@ import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.VirtualKeyboard 2.4
 import QtQuick.Layouts 1.15
+import RemoteController 1.0
 
 Window {
     id: app
     readonly property Style style: Style{}
+    property alias remoteController: remoteController
     width: 720
     height: 500
     visible: true
     title: qsTr("Android TV Remote Control")
+
+    RemoteController {
+        id:remoteController
+        onEnterPairingCode: codeInput.visible = true
+    }
 
     Rectangle {
         id:input
@@ -24,7 +31,7 @@ Window {
             height: app.height / 12
             Text {
                 id: deviceTest
-                text: qsTr("No device found!")
+                text: remoteController.deviceName === "" ? qsTr("No device found!") : remoteController.deviceName
                 leftPadding: app.style.spacingLarge
                 topPadding: app.style.spacingSmall
                 color: "#919191"
@@ -90,5 +97,11 @@ Window {
                 }
             }
         }
+    }
+    CodeInput {
+        id: codeInput
+        anchors.fill: parent
+        visible: false
+        onAccepted: remoteController.setPairingKey(codeText.text)
     }
 }

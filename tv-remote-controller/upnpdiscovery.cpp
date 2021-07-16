@@ -1,5 +1,7 @@
 #include "upnpdiscovery.h"
 
+// UpnpDiscovery class constructor
+// Creating QUdpSocket and QNetworkAccessManager object and connecting its signals
 UpnpDiscovery::UpnpDiscovery(QObject *parent) : QObject(parent)
 {
     discovery_state_ = StateIdle;
@@ -11,6 +13,7 @@ UpnpDiscovery::UpnpDiscovery(QObject *parent) : QObject(parent)
 
 }
 
+// This function will start the discovery by sending a multicast search message
 void UpnpDiscovery::StartDiscovery()
 {
     if (discovery_state_ != StateIdle) {
@@ -53,6 +56,9 @@ void UpnpDiscovery::StartDiscovery()
     }
 }
 
+// This function is a callback for socket to receive incoming data
+// after receiving data it will parse it to find device description url and
+// request for description
 void UpnpDiscovery::ProcessDiscoveryData()
 {
     while (udp_socket_->hasPendingDatagrams()) {
@@ -84,6 +90,9 @@ void UpnpDiscovery::ProcessDiscoveryData()
     }
 }
 
+// This function is a callback for web request to receive incoming data
+// after receiving data it will emit found device signal
+// param reply: QNetworkReply of received response
 void UpnpDiscovery::ProcessDeviceDescription(QNetworkReply *reply)
 {
 
@@ -98,6 +107,8 @@ void UpnpDiscovery::ProcessDeviceDescription(QNetworkReply *reply)
     reply->deleteLater();
 }
 
+// This function will request the device information on given device url
+// param device_url: QUrl of dial device description url
 void UpnpDiscovery::RequestDeviceDescription(const QUrl &device_url)
 {
     qDebug() << "read device description" << device_url;
@@ -108,7 +119,6 @@ void UpnpDiscovery::RequestDeviceDescription(const QUrl &device_url)
     }
 
     network_access_manager_->get(QNetworkRequest(device_url));
-
 }
 
 

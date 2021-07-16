@@ -30,6 +30,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     datamodel.h \
+    keycodesenum.h \
     keycommandsender.h \
     messagehandler.h \
     pairinghandler.h \
@@ -40,6 +41,7 @@ HEADERS += \
 
 DISTFILES += \
     Button.qml \
+    CodeInput.qml \
     KeysPage.qml \
     main.qml \
     Style.qml

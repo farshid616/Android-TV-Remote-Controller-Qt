@@ -4,6 +4,7 @@
 #include <QUrl>
 #include <QString>
 
+// Dial Device data type to soring dial device information
 struct DialDevice
 {
     QUrl dial_rest_url{};
@@ -14,6 +15,7 @@ struct DialDevice
     QString udn{};
 };
 
+// Enumeration for discovery state
 enum DiscoveryState {
     StateIdle,
     StateSearching,

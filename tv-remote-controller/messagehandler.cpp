@@ -6,6 +6,9 @@
 #include <QJsonArray>
 #include <algorithm>
 
+// This function will extract description information of dial response
+// param dial_rest_url: QUrl of dial rest address
+// param device_description: QByteArray of receive raw data of dial response in xml format
 DialDevice MessageHandler::ParseDialDeviceDescription(const QUrl &dial_rest_url, const QByteArray &device_description)
 {
     DialDevice device;
@@ -42,9 +45,12 @@ DialDevice MessageHandler::ParseDialDeviceDescription(const QUrl &dial_rest_url,
     return device;
 }
 
+// This function will receive name of client and create a json message for pairing request
+// param client_name: QString of client name
+// return: QByteAray of created json message
 QByteArray MessageHandler::CreatePairingRequestJsonMessage(const QString &client_name)
 {
-//    message = {"protocol_version":1,"payload":{"service_name":"androidtvremote","client_name":client_name},"type":10,"status":200}
+    // sample message = {"protocol_version":1,"payload":{"service_name":"androidtvremote","client_name":client_name},"type":10,"status":200}
     QJsonObject jobject, payload_object;
     payload_object["service_name"] = "androidtvremote";
     payload_object["client_name"] = client_name;
@@ -57,10 +63,12 @@ QByteArray MessageHandler::CreatePairingRequestJsonMessage(const QString &client
     return json_document.toJson();
 }
 
+// This function will create a json option message for one of pairing phase
+// return: QByteAray of created json message
 QByteArray MessageHandler::CreateOptionJsonMessage()
 {
-//    message = {"protocol_version":1,"payload":{"output_encodings":[{"symbol_length":4,"type":3}],
-//    "input_encodings":[{"symbol_length":4,"type":3}],"preferred_role":1},"type":20,"status":200}
+      // sample message = {"protocol_version":1,"payload":{"output_encodings":[{"symbol_length":4,"type":3}],
+      // "input_encodings":[{"symbol_length":4,"type":3}],"preferred_role":1},"type":20,"status":200}
       QJsonObject jobject, payload_object, output_encoding, input_encoding;
       QJsonArray input_encoding_array, output_encoding_array;
       output_encoding["symbol_length"] = 4;
@@ -82,6 +90,8 @@ QByteArray MessageHandler::CreateOptionJsonMessage()
       return json_document.toJson();
 }
 
+// This function will create a json configuration message for one of pairing phase
+// return: QByteAray of created json message
 QByteArray MessageHandler::CreateConfigurationJsonMessage()
 {
 //    message = {"protocol_version":1,"payload":{"encoding":{"symbol_length":4,"type":3},"client_role":1},"type":30,"status":200}
@@ -100,9 +110,12 @@ QByteArray MessageHandler::CreateConfigurationJsonMessage()
     return json_document.toJson();
 }
 
+// This function will receive generated secret hash and create a json secret message for last step of pairing
+// param secret_hash: QString created secret hash
+// return: QByteArray of created json message
 QByteArray MessageHandler::CreateSecretJsonMessage(const QString &secret_hash)
 {
-//    message = {"protocol_version":1,"payload":{"secret":base64.b64encode(secret_hash).decode()},"type":40,"status":200}
+    // message = {"protocol_version":1,"payload":{"secret":base64.b64encode(secret_hash).decode()},"type":40,"status":200}
     QJsonObject jobject, payload_object;
     payload_object["secret"] = secret_hash;
 
@@ -114,6 +127,12 @@ QByteArray MessageHandler::CreateSecretJsonMessage(const QString &secret_hash)
     return json_document.toJson();
 }
 
+// This function will receive raw json message and two int pointer for returning detected
+// status and type of the message.
+// param json_message: QString raw received json message
+// param status: integer pointer of status to returning the result
+// param type: integer pointer of type to returning the result
+// return: bool to indicate success or error of the parsing function
 bool MessageHandler::JsonMessageParser(const QByteArray &json_message, int &status, int &type)
 {
     QJsonParseError parser_error{};
@@ -128,25 +147,29 @@ bool MessageHandler::JsonMessageParser(const QByteArray &json_message, int &stat
     return true;
 }
 
+// This function will receive device name and create a protobuf configuration message for sending remote keys
+// param device_name: QString name of the target device
+// return: QByteArray of created protobuf message
 QByteArray MessageHandler::ProtoBufConfigurationMessageCreator(const QString &device_name)
 {
     std::vector<int> message_array = {1,0,0,21,0,0,0,1,0,0,0,1,32,3,0,0,0,0,0,0};
     QByteArray message;
     message_array.push_back(device_name.size());
-//    for (const auto& item: device_name) {
-//        message_array.push_back(int(item.toLatin1()));
-//    }
+
     std::transform(device_name.begin(), device_name.end(), std::back_inserter(message_array),
                    [](QChar letter) -> int { return int(letter.toLatin1()); });
 
     std::transform(message_array.begin(), message_array.end(), std::back_inserter(message),
                    [](int item) -> char { return char(item); });
-//    for (const auto& item: message_array) {
-//        message.append(char(item));
-//    }
+
     return message;
 }
 
+// This function will receive key code, released flag and counter to create a protobuf key message
+// param key_code: integer of key code
+// param released: boolean of released flag
+// param counter: integer of counter (continous message counter)
+// return: QByteArray of created protobuf message
 QByteArray MessageHandler::ProtoBufSendKeyMessageCreator(const int &key_code, const bool &released, const int &counter)
 {
     std::vector<int> message_array = {1,2,0,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
@@ -159,9 +182,6 @@ QByteArray MessageHandler::ProtoBufSendKeyMessageCreator(const int &key_code, co
         message_array[15] = 1;
     }
 
-//    for (const auto& item: message_array) {
-//        message.append(char(item));
-//    }
     std::transform(message_array.begin(), message_array.end(), std::back_inserter(message),
                    [](int item) -> char { return char(item);});
     return message;

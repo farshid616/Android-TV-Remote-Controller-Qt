@@ -1,12 +1,9 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.15
+import KeyCodes 1.0
 
 Item {
     id:root
-//    Rectangle {
-//        anchors.fill: parent
-//        color: "purple"
-//    }
 
     RowLayout {
         id: keysLayout
@@ -18,10 +15,12 @@ Item {
             Button {
                 id: powerButton
                 buttonImage: "resources/Resources/Power.png"
+                mouseArea.onClicked: app.remoteController.sendKey(KeyCodes.KEYCODE_POWER)
             }
             Button {
                 id: backButton
                 buttonImage: "resources/Resources/back.png"
+                mouseArea.onClicked: app.remoteController.sendKey(KeyCodes.KEYCODE_BACK)
             }
         }
         ColumnLayout {
@@ -30,6 +29,7 @@ Item {
             Button {
                 id: leftButton
                 buttonImage: "resources/Resources/left.png"
+                mouseArea.onClicked: app.remoteController.sendKey(KeyCodes.KEYCODE_DPAD_LEFT)
             }
         }
         ColumnLayout {
@@ -37,14 +37,17 @@ Item {
             Button {
                 id: upButton
                 buttonImage: "resources/Resources/up.png"
+                mouseArea.onClicked: app.remoteController.sendKey(KeyCodes.KEYCODE_DPAD_UP)
             }
             Button {
                 id: okButton
                 buttonImage: "resources/Resources/ok.png"
+                mouseArea.onClicked: app.remoteController.sendKey(KeyCodes.KEYCODE_DPAD_CENTER)
             }
             Button {
                 id: downButton
                 buttonImage: "resources/Resources/down.png"
+                mouseArea.onClicked: app.remoteController.sendKey(KeyCodes.KEYCODE_DPAD_DOWN)
             }
         }
         ColumnLayout {
@@ -52,6 +55,7 @@ Item {
             Button {
                 id: rightButton
                 buttonImage: "resources/Resources/right.png"
+                mouseArea.onClicked: app.remoteController.sendKey(KeyCodes.KEYCODE_DPAD_RIGHT)
             }
         }
         ColumnLayout {
@@ -60,10 +64,12 @@ Item {
             Button {
                 id: menuButton
                 buttonImage: "resources/Resources/menu.png"
+                mouseArea.onClicked: app.remoteController.sendKey(KeyCodes.KEYCODE_MENU)
             }
             Button {
                 id: homeButton
                 buttonImage: "resources/Resources/home.png"
+                mouseArea.onClicked: app.remoteController.sendKey(KeyCodes.KEYCODE_HOME)
             }
         }
         ColumnLayout {
@@ -72,10 +78,12 @@ Item {
             Button {
                 id: volumeUpButton
                 buttonImage: "resources/Resources/plus.png"
+                mouseArea.onClicked: app.remoteController.sendKey(KeyCodes.KEYCODE_VOLUME_UP)
             }
             Button {
                 id: volumeDownButton
                 buttonImage: "resources/Resources/minus.png"
+                mouseArea.onClicked: app.remoteController.sendKey(KeyCodes.KEYCODE_VOLUME_DOWN)
             }
             Button {
                 id: keyboardButton
@@ -89,26 +97,19 @@ Item {
         visible: false
         readonly property bool empty: textInput.text === ""
         anchors.bottom: parent.bottom
-//        anchors.right: parent.right
-//        anchors.leftMargin: app.style.spacingSmall
         height: 50
         width: 100
-//        verticalAlignment: TextInput.AlignVCenter
         font.pixelSize: app.style.textSizeMedium
         renderType: Text.NativeRendering
         selectByMouse: true
-//        color: style.colorTextPrimary
-//        selectionColor: style.colorTextSelection
         clip: !empty
 
 
         Text {
             id: placeholder
 
-//            anchors.verticalCenter: parent.verticalCenter
             width: parent.width
             elide: Text.ElideRight
-//            color: style.colorTextHint
             font.pixelSize: textInput.font.pixelSize
             renderType: textInput.renderType
             visible: opacity > 0

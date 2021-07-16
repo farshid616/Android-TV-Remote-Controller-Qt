@@ -1,45 +1,68 @@
 #include "remotecontrolcore.h"
 
 #include "messagehandler.h"
+#include "settingshandler.h"
 #include "socketutils.h"
 
+// RemoteControlCore class constructor
+// Creating signal conctions and checking for previous paired devicee
 RemoteControlCore::RemoteControlCore(QObject *parent) : QObject(parent)
 {
-//    CreatePrivateKeyAndCertificate("key.pem", "cert.pem");
     connect(&upnp_discovery_, &UpnpDiscovery::FoundDialDevice, this, &RemoteControlCore::DialDeviceDetected);
-    upnp_discovery_.StartDiscovery();
+    connect(&pairing_handler_, &PairingHandler::PairingFinished, this, &RemoteControlCore::onPairingFinished);
+    connect(&pairing_handler_, &PairingHandler::EnterPairingCode, this, &RemoteControlCore::enterPairingCode);
+    if (Settings::SettingsHandler::GetInstance()->GetLastDeviceName() == "") {
+        upnp_discovery_.StartDiscovery();
+    } else {
+        command_sender_.StartSending("test", Settings::SettingsHandler::GetInstance()->GetLastDeviceIp(), "key.pem", "cert.pem");
+    }
 
 }
 
+// This function is a bridge to recieve pairing key input from QML ui and pass it to
+// pairing handler class
+// param pairing_code: QString entered pairing code
+void RemoteControlCore::setPairingKey(const QString &pairing_code)
+{
+    pairing_handler_.FinishPairing(pairing_code);
+}
+
+// This function is a bridge to receive key codes from QML ui and pass them to
+// command sender class
+// param key: integer of entered key code
+void RemoteControlCore::sendKey(const int &key)
+{
+    command_sender_.SendKey(key);
+}
+
+// This function will return the last paired device name
+// return: QString of last paired device name
+QString RemoteControlCore::getDeviceName()
+{
+    return Settings::SettingsHandler::GetInstance()->GetLastDeviceName();
+}
+
+// This function is a callback for detected dial device.
+// After detcection of device it will generate certificate and start the pairing process
+// param dial_rest_url: QUrl of rest dial address
+// param device_description: QByteArray of raw dial device information in xml format
 void RemoteControlCore::DialDeviceDetected(const QUrl &dial_rest_url, const QByteArray &device_description)
 {
-    DialDevice device = MessageHandler::ParseDialDeviceDescription(dial_rest_url, device_description);
-    qDebug()<<"name = "<<device.friendly_name;
-    qDebug()<<"ip = "<<device.dial_rest_url.host();
+    device_ = MessageHandler::ParseDialDeviceDescription(dial_rest_url, device_description);
+    qDebug()<<"name = "<<device_.friendly_name;
+    qDebug()<<"ip = "<<device_.dial_rest_url.host();
 
-//    pairing_handler_.StartPairing("hmi", device.dial_rest_url.host(), "key.pem", "cert.pem");
-
-//    QTimer::singleShot(15000, [=]{
-//            command_sender_.StartSending(device.friendly_name, device.dial_rest_url.host(), "key.pem", "cert.pem");
-//            qDebug()<<"connect";
-//        });
-    command_sender_.StartSending("test", device.dial_rest_url.host(), "key.pem", "cert.pem");
-    QTimer::singleShot(5000, [=]{
-            command_sender_.SendKey(24);
-            qDebug()<<"send key";
-        });
-    QTimer::singleShot(6000, [=]{
-            command_sender_.SendKey(25);
-            qDebug()<<"send key";
-        });
-    QTimer::singleShot(7000, [=]{
-            command_sender_.SendKey(19);
-            qDebug()<<"send key";
-        });
+    CreatePrivateKeyAndCertificate("key.pem", "cert.pem");
+    pairing_handler_.StartPairing("hmi", device_.dial_rest_url.host(), "key.pem", "cert.pem");
 
 }
 
-void RemoteControlCore::Start()
+// This function is a callback for finished pairing signal.
+// It will save the paired device information in settings and start sending keys socket
+void RemoteControlCore::onPairingFinished()
 {
-    pairing_handler_.StartPairing("hmi", "192.168.0.144", "key.pem", "cert.pem");
+    Settings::SettingsHandler::GetInstance()->SetLastDeviceName(device_.friendly_name);
+    Settings::SettingsHandler::GetInstance()->SetLastDeviceIp(device_.dial_rest_url.host());
+    emit deviceNameChanged(device_.friendly_name);
+    command_sender_.StartSending("test", Settings::SettingsHandler::GetInstance()->GetLastDeviceIp(), "key.pem", "cert.pem");
 }

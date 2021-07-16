@@ -11,6 +11,7 @@ const QString SETTINGS_FILE_NAME = "settings.ini";
 const QString LAST_DEVICE_NAME = "LAST_DEVICE_NAME";
 const QString LAST_DEVICE_IP = "LAST_DEVICE_IP";
 
+// This is a singleton to storing and loading settings
 class SettingsHandler
 {
 public:

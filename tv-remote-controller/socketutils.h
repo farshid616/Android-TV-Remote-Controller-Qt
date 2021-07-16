@@ -12,6 +12,9 @@
 #include <QtOpcUa/QOpcUaX509ExtensionKeyUsage>
 #include <QFile>
 
+// This function will convert entered integer to four byte data
+// param num: integer of number
+// return: QByteArray of converted number
 static QByteArray GetFourByteArray(const int& num) {
     QByteArray result;
 
@@ -28,6 +31,9 @@ static QByteArray GetFourByteArray(const int& num) {
     return result;
 }
 
+// This function create private key and certificate and will save it in the given address
+// param private_key_path: QString path to saving generated private key
+// param certificate_path: QString path to saving generated certificate
 static void CreatePrivateKeyAndCertificate(const QString& private_key_path, const QString& certificate_path) {
     // Generate RSA Key
     QOpcUaKeyPair key;

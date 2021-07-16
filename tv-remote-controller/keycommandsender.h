@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QtNetwork>
 
+// This class is responsible to handle send keys process
 class KeyCommandSender : public QObject
 {
     Q_OBJECT

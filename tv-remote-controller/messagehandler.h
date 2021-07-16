@@ -3,6 +3,7 @@
 
 #include "datamodel.h"
 
+// This class is responsible to create and parse all needed message for discovering, pairing and sending keys
 class MessageHandler
 {
 public:
