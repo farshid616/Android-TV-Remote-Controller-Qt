@@ -15,8 +15,8 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     KeyCodes::KeysCodeQMLDeclaration();
-//    qmlRegisterType<KeyCodes>("KeyCodes", 1, 0, "KeyCodes");
     qmlRegisterType<RemoteControlCore>("RemoteController", 1, 0, "RemoteController");
+    qmlRegisterInterface<DeviceModel>("DeviceModel", 1);
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
@@ -24,7 +24,5 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
     engine.load(url);
-
-//    RemoteControlCore remote_core;
     return app.exec();
 }

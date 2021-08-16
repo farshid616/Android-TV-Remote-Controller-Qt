@@ -5,6 +5,8 @@
         <file>Button.qml</file>
         <file>KeysPage.qml</file>
         <file>CodeInput.qml</file>
+        <file>DevicesListView.qml</file>
+        <file>DevicesPage.qml</file>
     </qresource>
     <qresource prefix="/resources">
         <file>Resources/down.png</file>

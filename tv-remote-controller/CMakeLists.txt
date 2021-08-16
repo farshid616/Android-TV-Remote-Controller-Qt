@@ -50,6 +50,9 @@ set(PROJECT_SOURCES
         upnpdiscovery.h
         keycommandsender.cpp
         keycommandsender.h
+        devicemodel.cpp
+        devicemodel.h
+        keycodesenum.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

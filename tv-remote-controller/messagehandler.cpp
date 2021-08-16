@@ -40,7 +40,7 @@ DialDevice MessageHandler::ParseDialDeviceDescription(const QUrl &dial_rest_url,
     }
 
     if (xml.hasError()) {
-        qDebug() << "Unable to parse description" << xml.errorString() << xml.lineNumber();
+        //qDebug() << "Unable to parse description" << xml.errorString() << xml.lineNumber();
     }
     return device;
 }

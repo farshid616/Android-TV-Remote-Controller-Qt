@@ -7,6 +7,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        devicemodel.cpp \
         keycommandsender.cpp \
         main.cpp \
         messagehandler.cpp \
@@ -30,6 +31,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     datamodel.h \
+    devicemodel.h \
     keycodesenum.h \
     keycommandsender.h \
     messagehandler.h \
@@ -42,6 +44,8 @@ HEADERS += \
 DISTFILES += \
     Button.qml \
     CodeInput.qml \
+    DevicesListView.qml \
+    DevicesPage.qml \
     KeysPage.qml \
     main.qml \
     Style.qml

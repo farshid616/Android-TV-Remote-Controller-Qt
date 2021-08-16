@@ -103,24 +103,5 @@ Item {
         renderType: Text.NativeRendering
         selectByMouse: true
         clip: !empty
-
-
-        Text {
-            id: placeholder
-
-            width: parent.width
-            elide: Text.ElideRight
-            font.pixelSize: textInput.font.pixelSize
-            renderType: textInput.renderType
-            visible: opacity > 0
-            text: qsTr("Insert your phrase to search")
-
-            Behavior on opacity {
-                NumberAnimation {
-                    easing.type: Easing.OutExpo
-                    duration: style.durationFast
-                }
-            }
-        }
     }
 }

@@ -21,9 +21,11 @@ Item {
         border.width: 1
         border.color: "grey"
         color: "#444347"
-        width: 350
-        height: 240
-        anchors.centerIn: parent
+        width: 280
+        height: 190
+        anchors.top: parent.top
+        anchors.horizontalCenter: bglayer.horizontalCenter
+        anchors.topMargin: app.style.spacingXLarge
         z: 11
 
         ColumnLayout {
@@ -64,9 +66,9 @@ Item {
                 Layout.alignment: Qt.AlignHCenter
                 Layout.fillHeight: true
                 Layout.minimumHeight: 60
-                Layout.minimumWidth: 300
+                Layout.minimumWidth: 250
                 Layout.topMargin: app.style.spacingMedium
-                spacing: app.style.spacingXLarge
+                spacing: app.style.spacingLarge
 
 
                 Button {
@@ -74,7 +76,7 @@ Item {
                     Layout.fillWidth: true
                     Layout.minimumWidth: 50
                     Layout.minimumHeight: 30
-                    Layout.leftMargin: app.style.spacingXLarge
+                    Layout.leftMargin: app.style.spacingLarge
                     color: "#d5d4d6"
                     border.color: "white"
                     border.width: 2
@@ -89,7 +91,7 @@ Item {
                     Layout.fillWidth: true
                     Layout.minimumWidth: 50
                     Layout.minimumHeight: 30
-                    Layout.rightMargin: app.style.spacingXLarge
+                    Layout.rightMargin: app.style.spacingLarge
                     color: "#d5d4d6"
                     border.color: "white"
                     border.width: 2

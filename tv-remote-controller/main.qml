@@ -8,6 +8,7 @@ Window {
     id: app
     readonly property Style style: Style{}
     property alias remoteController: remoteController
+    property bool settingsActivated: false
     width: 720
     height: 500
     visible: true
@@ -45,6 +46,25 @@ Window {
                 Layout.rightMargin: app.style.spacingMedium
                 Layout.topMargin: app.style.spacingSmall
                 buttonImage: "/resources/Resources/setting.png"
+                mouseArea.onClicked: {
+
+                    animation.running = true
+                    settingsActivated = !settingsActivated
+                    loaderAnimation.running = true
+                    settingsButton.buttonImage = settingsActivated ? "/resources/Resources/home.png" :
+                                                                     "/resources/Resources/setting.png"
+                    loader.source = !settingsActivated? "KeysPage.qml" : "DevicesPage.qml"
+                }
+
+                NumberAnimation {
+                    id: animation
+                    target: settingsButton
+                    property: "rotation"
+                    from: 0
+                    to: 360
+                    duration: 800
+                    easing.type: Easing.InExpo
+                }
             }
         }
         Loader {
@@ -54,16 +74,13 @@ Window {
             width: app.width
             height: app.height / 1.1
             source: "KeysPage.qml"
-
-            onSourceChanged: animation.running = true
-
             NumberAnimation {
-                id: animation
-                target: loader.item
-                property: "x"
+                id: loaderAnimation
+                target: loader
+                property: "opacity"
                 from: 0
-                to: app.width - loader.item.width
-                duration: 1000
+                to: 1
+                duration: 800
                 easing.type: Easing.InExpo
             }
         }
