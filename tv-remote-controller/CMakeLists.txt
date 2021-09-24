@@ -12,10 +12,10 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 #export CMAKE_PREFIX_PATH=/home/farshid/Qt/5.15.0/gcc_64:$CMAKE_PREFIX_PATH
-set(Qt5Core_DIR /home/farshid/Qt/5.15.0/gcc_64/lib/cmake/Qt5Core)
-set(Qt5Quick_DIR /home/farshid/Qt/5.15.0/gcc_64/lib/cmake/Qt5Quick)
-set(Qt5OpcUa_DIR /home/farshid/Qt/5.15.0/gcc_64/lib/cmake/Qt5OpcUa)
-set(Qt5Network_DIR /home/farshid/Qt/5.15.0/gcc_64/lib/cmake/Qt5Network)
+#set(Qt5Core_DIR /home/farshid/Qt/5.15.0/gcc_64/lib/cmake/Qt5Core)
+#set(Qt5Quick_DIR /home/farshid/Qt/5.15.0/gcc_64/lib/cmake/Qt5Quick)
+#set(Qt5OpcUa_DIR /home/farshid/Qt/5.15.0/gcc_64/lib/cmake/Qt5OpcUa)
+#set(Qt5Network_DIR /home/farshid/Qt/5.15.0/gcc_64/lib/cmake/Qt5Network)
 
 # QtCreator supports the following variables for Android, which are identical to qmake Android variables.
 # Check https://doc.qt.io/qt/deployment-android.html for more information.
